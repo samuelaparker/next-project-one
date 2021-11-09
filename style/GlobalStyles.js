@@ -7,7 +7,7 @@ export const GlobalStyles = createGlobalStyle`
     padding: 0;
     margin: 0;
     font-family: program, sans-serif;
-
+    flex-grow: 1;
 font-weight: 900;
 
 font-style: normal;
