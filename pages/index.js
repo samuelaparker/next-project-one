@@ -5,10 +5,7 @@ import MomAndDad from "../public/images/_15_00841.jpg";
 // import Countries from "../components/Countries"
 import { gql } from "@apollo/client";
 import client from "../apollo-client";
-<<<<<<< Updated upstream
-=======
 import CatFacts from "../components/CatFacts";
->>>>>>> Stashed changes
 
 
 // export async function getServerSideProps(context) {
@@ -71,10 +68,7 @@ export default function Home({countries}) {
         ))}
       </div> */}
       {/* <Countries /> */}
-<<<<<<< Updated upstream
-=======
       <CatFacts />
->>>>>>> Stashed changes
     </>
   );
 }
