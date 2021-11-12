@@ -2,50 +2,68 @@ import Head from "next/head";
 import Image from "next/image";
 import styled from "styled-components";
 import MomAndDad from "../public/images/_15_00841.jpg";
-// import Countries from "../components/Countries"
-import { gql } from "@apollo/client";
-import client from "../apollo-client";
 import CatFacts from "../components/CatFacts";
+import client from "../apollo-client"
+import { useState, useEffect } from "react";
+import {
+  ApolloClient,
+  InMemoryCache,
+  ApolloProvider,
+  useQuery,
+  gql
+} from "@apollo/client";
 
 
-// export async function getServerSideProps(context) {
-//   const res = await fetch(`https://cat-fact.herokuapp.com/facts`)
-//   const data = await res.json()
 
-//   if (!data) {
-//     return {
-//       notFound: true,
-//     }
-//   }
+const clientCountries = new ApolloClient({
+  uri: 'https://countries.trevorblades.com',
+  cache: new InMemoryCache()
+});
+
+
+
+// export async function getStaticProps(context) {
+//   const { data } = await client.query({
+//     query: gql`
+//       query Countries {
+//         countries {
+//           code
+//           name
+//           emoji
+//         }
+//       }
+//     `,
+//   })
 
 //   return {
-//     props: { data }, // will be passed to the page component as props
-//   }
+//     props: {
+//       countries: data.countries.slice(0, 4),
+//     },
+//   };
 // }
 
-export async function getStaticProps(context) {
-  const { data } = await client.query({
+
+export default function Home() {
+
+  useEffect(() => {
+  clientCountries
+  .query({
     query: gql`
-      query Countries {
-        countries {
-          code
-          name
-          emoji
-        }
-      }
-    `,
+           query Countries {
+             countries {
+               code
+               name
+               emoji
+             }
+           }
+        `
   })
+  .then(result => setCountries(result.data.countries.slice(0, 10)));
+  }, []);
 
-  return {
-    props: {
-      countries: data.countries.slice(0, 4),
-    },
-  };
-}
+const [countries, setCountries] = useState([]);
 
-
-export default function Home({countries}) {
-  console.log(countries)
+  console.log("countriesData", countries)
   return (
     <>
       <Head>
@@ -58,16 +76,12 @@ export default function Home({countries}) {
           <Image src={MomAndDad} alt="Mom and Dad" />
         </ImageWrap>
       </Wrapper>
-      {/* <div>
-        {data.map((n) => (
-          <ListItem key={n._id}>
-            <p>{n.text}</p>
-            <p>{n.emoji}</p>
-            <p>{n.code}</p>
-          </ListItem>
+      <div>
+        {countries.map(country => (
+          <ListItem key={country.code}>{`${country.name} - ${country.emoji}`}</ListItem>
         ))}
-      </div> */}
-      {/* <Countries /> */}
+      </div>
+       
       <CatFacts />
     </>
   );
